@@ -107,6 +107,46 @@ int main()
     printf("New personalized file desc %d\n", fd1);
 }
 
-// *************************  system call *************************
+// ************************* fork() system call *************************
+// to create a child process
+// can return 3 values
+// error q<0, q==0 child, q>0 parent
 
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+int main()
+{
+    pid_t q;
+    q = fork(); // if success, from this line we have two process , child and parent
+    if (q < 0)
+        printf("error");
+    else if (q == 0)
+    {   // child process
+        // write code here for child
+        printf("child having pid %d\n", getpid());
+        printf("My Parent's pid is %d\n", getppid());
+    }
+    else
+    { // q>0; parent process
+        printf("Parent having pid %d\n", getpid());
+        printf("My Child's pid is %d \n", p);
+    }
+}
+// before fork
+// Parent having pid 888
+// My Child's pid is 889
+// child having pid 889
+// My Parent's pid is 339
+// above order can vary as we have two process and any one can get CPU first
+
+// *************************  WAIT system call *************************
+// to control the order of above sequence
+// parent will wait for child to terminate
+
+
+// *************************  system call *************************
+// *************************  system call *************************
+// *************************  system call *************************
+// *************************  system call *************************
 // *************************  system call *************************
