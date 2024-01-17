@@ -87,7 +87,25 @@ int main()
     read(f, buff, 10);
     write(1, buff, 10); // x1x2x3x4x5
 }
-// *************************  system call *************************
+// ************************* dup & dup2 system call *************************
+//  will be assigned to the lowest file descriter
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+int main()
+{
+    int fd, fd1;
+    fd = open("dup", O_RDONLY);
+    printf("OLD file descriptor %d\n", fd);
+
+    // fd1 = dup(fd);
+    // printf("NEW file descr. %d\n", fd1);
+
+    fd1 = dup2(fd, 7);
+    printf("New personalized file desc %d\n", fd1);
+}
 
 // *************************  system call *************************
 
