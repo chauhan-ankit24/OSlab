@@ -9,6 +9,7 @@
 
 // ctrl + x - back
 // ctrl + l - clear
+// ps - which process are runnning in system
 
 // File descriptor  // 0 stdin - keyboard
 // 1 stdout - on screen
@@ -241,8 +242,22 @@ int main()
         }
     }
 
-    // *************************  system call *************************
-    // *************************  system call *************************
-    // *************************  system call *************************
-    // *************************  system call *************************
-    // *************************  system call *************************
+    // *************************  Create an ORPHAN process *************************
+
+    if (p == 0)
+    {
+        sleep(5); // child goes to sleep and in the mean time parent terminates
+        printf("I am child having PID %d\n", getpid());
+        printf("My parent PID is %d\n", getppid());
+    }
+    else
+    {
+        printf("I am parent having PID %d\n", getpid());
+        printf("My child PID is %d\n", p);
+    }
+}
+
+// *************************  system call *************************
+// *************************  system call *************************
+// *************************  system call *************************
+// *************************  system call *************************
