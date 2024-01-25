@@ -300,6 +300,30 @@ int main()
         printf("My Child's pid is %d \n", q);
     }
 }
-    // *************************  system call *************************
-    // *************************  system call *************************
-    // *************************  system call *************************
+// *************************  execl() system call *************************
+// To replace current process image with a new one
+
+int main()
+{
+    printf("Before\n");
+    execl("/bin/ls", "ls", "-1", NULL);
+    printf("After\n");
+}
+// usage :
+// with fork() a child process is created which will do the dame work as the parent(same code) but with use f execl we can change the code of child entirely.
+int main()
+{
+    pid_t q;
+    q = fork();
+    if (q == 0)
+    { // child
+        execl("/bin/ls", "ls", "-1", NULL);
+    }
+    else
+    { // parent
+        wait(NULL);
+        printf("I am parent having id %d\n", getpid());
+    }
+}
+// *************************  system call *************************
+// *************************  system call *************************
