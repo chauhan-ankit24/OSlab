@@ -256,8 +256,50 @@ int main()
         printf("My child PID is %d\n", p);
     }
 }
+// use ps command to see process running
 
-// *************************  system call *************************
-// *************************  system call *************************
-// *************************  system call *************************
-// *************************  system call *************************
+// *************************  Create an Zonbie Process *************************
+int main()
+{
+    pid_t q;
+    q = fork();
+    if (q == 0)
+    {
+        printf("child having pid %d\n", getpid());
+        printf("My Parent's pid is %d\n", getppid());
+    }
+    else
+    {
+        sleep(3);
+        printf("Parent having pid %d\n", getpid());
+        printf("My Child's pid is %d \n", q);
+    }
+}
+// OUTPUT
+// run 'ps' command
+// we will still get the entry of child process even though it is finished ; infrotn of it we will get --> " <defunct> "
+
+// HOW to avoid zombie process
+// use wait(NULL)
+// will not get <defunct>
+
+int main()
+{
+    pid_t q;
+    q = fork();
+    if (q == 0)
+    {
+        printf("child having pid %d\n", getpid());
+        printf("My Parent's pid is %d\n", getppid());
+    }
+    else
+    {
+        wait(NULL); // till child goes to termination state
+        sleep(3);
+        printf("Parent having pid %d\n", getpid());
+        printf("My Child's pid is %d \n", q);
+    }
+}
+    // *************************  system call *************************
+    // *************************  system call *************************
+    // *************************  system call *************************
