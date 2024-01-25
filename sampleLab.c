@@ -111,7 +111,7 @@ int main()
 // to create a child process
 // can return 3 values
 // error q<0, q==0 child, q>0 parent
-
+// pid - process id
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -122,7 +122,7 @@ int main()
     if (q < 0)
         printf("error");
     else if (q == 0)
-    {   // child process
+    { // child process
         // write code here for child
         printf("child having pid %d\n", getpid());
         printf("My Parent's pid is %d\n", getppid());
@@ -130,23 +130,119 @@ int main()
     else
     { // q>0; parent process
         printf("Parent having pid %d\n", getpid());
-        printf("My Child's pid is %d \n", p);
+        printf("My Child's pid is %d \n", q); // The value of q will be the child process ID in the parent process and 0 in the child process.
     }
+    printf("common\n");
 }
 // before fork
 // Parent having pid 888
 // My Child's pid is 889
 // child having pid 889
 // My Parent's pid is 339
+// common
+// common // two times as common for both process
 // above order can vary as we have two process and any one can get CPU first
 
 // *************************  WAIT system call *************************
 // to control the order of above sequence
-// parent will wait for child to terminate
+// parent will wait for child to terminate not child for parent, child will wait for his own child
 
+// to wait child for parent, use sleep(can be used for both ), will not wait for parent to end but will wait for specified time
 
-// *************************  system call *************************
-// *************************  system call *************************
-// *************************  system call *************************
-// *************************  system call *************************
-// *************************  system call *************************
+//  wait,  waitpid,  waitid  -  wait  for process to change state
+//   A state change is considered to be: the child terminated;
+//    the child was stopped by a signal; or the child was re‐
+//    sumed  by a signal.
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main()
+{
+    pid_t q;
+    q = fork(); // if success, from this line we have two process , child and parent
+    if (q < 0)
+        printf("error");
+    else if (q == 0)
+    { // child process
+        // write code here for child
+        sleep(3);
+        printf("child having pid %d\n", getpid());
+        printf("My Parent's pid is %d\n", getpid());
+    }
+    else
+    { // q>0; parent process
+        printf("Parent having pid %d\n", getpid());
+        wait(NULL); // above line will execute but below one will wait
+        printf("My Child's pid is %d \n", q);
+    }
+    printf("common\n");
+}
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main()
+{
+    pid_t q;
+    q = fork();
+    if (q < 0)
+        printf("error");
+    else if (q == 0)
+    {
+        sleep(3);
+        printf("child having pid %d\n", getpid());
+        printf("My Parent's pid is %d\n", getpid());
+    }
+    else
+    {
+        // w=wait(NULL);
+        w1 = wait(&wstatus);                          // process id of child that has changed the state
+        printf("Status is %d\n", WIFEXITED(wstatus)); // return true if state change was by normal termination of child
+        // printf("Status is %d\n",w1);
+        printf("My child's id is %d\n", w1);
+        printf("I am parent having id %d\n", getpid());
+        printf("Parent having pid %d\n", getpid());
+        printf("My Child's pid is %d \n", q);
+    }
+    printf("common\n");
+}
+
+// When we want parent to wait for perticular child process of some pid
+int main()
+{
+    pid_t p, q;
+    printf("before fork\n");
+    p = fork();
+    if (p == 0) // child1
+    {
+        printf("I am first child having Pid %d\n", getpid());
+        printf("My parent's Pid is %d\n", getppid());
+    }
+    else
+    { // parent
+        q = fork();
+        if (q == 0) // child2
+        {
+            printf("I am second child having PID %d\n", getpid());
+            printf("Second child's parent PID is %d\n", getppid());
+        }
+        else
+        {
+            // wait(NULL);
+            waitpid(p, NULL, 0); // will wait for p child process
+            printf("I am parent having id %d\n", getpid());
+            printf("My First child's PID is %d\n", p);
+            printf("My Second child's PID is %d\n", q);
+        }
+    }
+
+    // *************************  system call *************************
+    // *************************  system call *************************
+    // *************************  system call *************************
+    // *************************  system call *************************
+    // *************************  system call *************************
