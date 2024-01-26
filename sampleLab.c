@@ -325,5 +325,50 @@ int main()
         printf("I am parent having id %d\n", getpid());
     }
 }
+// *************************  create threads *************************
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
+
+void *thread_function(void *arg);
+int i, n, j;
+
+int main()
+{
+    pthread_t a_thread;                                      // thread declaration
+    pthread_create(&a_thread, NULL, thread _function, NULL); // thread is created
+    thread_join(a_thread, NULL);                             // process waits for thread to finish . without this both for loop will get merged
+    printf("Inside Main Program\n");
+    for (j = 20; j < 25; j++)
+    {
+        printf("%d \n", j);
+        sleep(1);
+    }
+}
+void *thread_function(void *arg)
+{ // the work to be done by the thread is defined in this function
+    printf("Inside Thread\n");
+    for (i = 0; i < 5; i++)
+    {
+        printf("%d \n", i);
+        sleep(1);
+    }
+}
+
+// output
+// Inside Thread
+// 0
+// 1
+// 2
+// 3
+// 4
+// Inside Main Program
+// 20
+// 21
+// 22
+// 23
+// 24
+
+// *************************  system call *************************
 // *************************  system call *************************
 // *************************  system call *************************
