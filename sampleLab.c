@@ -369,6 +369,32 @@ void *thread_function(void *arg)
 // 23
 // 24
 
-// *************************  system call *************************
+// *************************  Passing value to threads *************************
+
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
+
+void *thread_function(void *arg);
+int num[2] = {3, 5};
+
+int main()
+{
+    thread_t a_thread; // thread declaration
+    void *result;
+    thread_create(&a_thread, NULL, thread_function, (void *)num); // thread is created
+    thread_join(a_thread, &result);                               // result stores the value returned by the thread
+    printf("Inside Main process\n");
+    printf("Thread returned: %s\n", (char *)result);
+}
+void *thread_function(void *arg)
+{
+    // the work to be done by the thread is defined in this functio
+    printf("Inside Thread\n");
+    int *x = arg;
+    int sum = x[0] + x[1];
+    printf("Sum is %d\n", sum);
+    thread_exit("sum calculated"); // value returned
+}
 // *************************  system call *************************
 // *************************  system call *************************
